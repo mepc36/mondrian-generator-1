@@ -1,5 +1,10 @@
 const CANVAS_WIDTH = 1920
 const CANVAS_HEIGHT = 1080
+const legalColors = ['red', 'yellow', 'blue']
+
+const getRandomItem = array => array[Math.floor(Math.random() * array.length)];
+
+const canvasColor = getRandomItem(legalColors)
 
 function getContext(fillStyle = 'white', isTransparent) {
   const canvas = document.getElementById('compositionCanvas');
@@ -7,7 +12,7 @@ function getContext(fillStyle = 'white', isTransparent) {
   canvas.height = CANVAS_HEIGHT
   const context = canvas.getContext('2d');
   if (!isTransparent) {
-    context.fillStyle = fillStyle
+    context.fillStyle = canvasColor
     context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
   return { context, canvas }
@@ -239,9 +244,7 @@ const makeArtistImgFuncs = {
   Connor: (artistName, shouldSave, opts, fileName, idx) => {
     let { context, canvas } = getContext('', true)
 
-    const legalColors = ['red', 'blue', 'yellow']
-    const fillStyle = getRandomItem(legalColors)
-    context = drawPolygon(context, fillStyle)
+    context = drawPolygon(context, ['#fe0000', '#ffcece'])
 
     if (shouldSave) {
       saveCanvas(fileName)
@@ -249,52 +252,21 @@ const makeArtistImgFuncs = {
   }
 }
 
-const getRandomItem = array => array[Math.floor(Math.random() * array.length)];
+function drawPolygonOutline(context, lineWidth) {
+  context.lineWidth = lineWidth;
+  context.strokeStyle = 'black';
+  context.stroke();
+  return context
+}
 
-function drawPolygon(context, fillStyle) {
-  const ptRanges = {
-    top: {
-      x: {
-        min: 0,
-        max: CANVAS_WIDTH - 1,
-      },
-      y: {
-        min: 0,
-        max: 0,
-      },
-    },
-    right: {
-      x: {
-        min: CANVAS_WIDTH - 1,
-        max: CANVAS_WIDTH - 1,
-      },
-      y: {
-        min: 0,
-        max: CANVAS_HEIGHT - 1,
-      },
-    },
-    bottom: {
-      x: {
-        min: 0,
-        max: CANVAS_WIDTH - 1,
-      },
-      y: {
-        min: CANVAS_HEIGHT - 1,
-        max: CANVAS_HEIGHT - 1,
-      },
-    },
-    left: {
-      x: {
-        min: 0,
-        max: 0,
-      },
-      y: {
-        min: 0,
-        max: CANVAS_HEIGHT - 1,
-      },
-    },
-  }
+const shuffle = (array) => array.sort(() => .5 - Math.random())
 
+function drawPolygon(context) {
+  const ptRanges = getPtRanges()
+
+  // const legalColors = ['#fe0000', '#ffcece']
+  const notPickedColor = getRandomItem(legalColors)
+  const fillColors = legalColors.filter(color => color !== notPickedColor)
   const canvasSides = ['top', 'right', 'bottom', 'left']
   const removedSide = getRandomItem(canvasSides)
   const polygonSides = Math.random() > .5 ? canvasSides.filter(canvasSide => canvasSide !== removedSide) : canvasSides
@@ -317,12 +289,36 @@ function drawPolygon(context, fillStyle) {
 
   context.closePath();
 
-  context.lineWidth = 2;
-  context.strokeStyle = 'black';
-  context.stroke();
+  // context = drawPolygonOutline(context, 5)
 
-  context.fillStyle = fillStyle;
-  context.fill();
+  // const gradient = context.createLinearGradient(0, 540, 1920, 540);
+  // gradient.addColorStop(0, fillColors[0]);
+  // gradient.addColorStop(.4, 'black');
+  // context.fillStyle = gradient;
+  // context.fill();
+
+  // RADIAL GRADIENT:
+  const centerX = polygonPts.reduce((acc, currVal) => acc + currVal.x, 0) / polygonSides.length
+  const centerY = polygonPts.reduce((acc, currVal) => acc + currVal.y, 0) / polygonSides.length
+  const randomTriPt = getRandomItem(polygonPts)
+  const radius1 = getRandomInt(300, 1000)
+  const radius2 = getRandomInt(1000, 2000)
+
+  const gradient = context.createRadialGradient(randomTriPt.x, randomTriPt.y, radius1, randomTriPt.x, randomTriPt.y, radius2);
+  const gradColors = ['red', 'blue', 'yellow', 'black', '#dbdbdb']
+  const notColors = [getRandomItem(gradColors), getRandomItem(gradColors)]
+  const trueColors = shuffle(gradColors.filter(gradColor => !notColors.includes(gradColor)))
+
+  const stopPt1 = getRandomInt(0, 20)
+  const stopPt2 = getRandomInt(stopPt1, 49)
+  const stopPt3 = getRandomInt(stopPt2, 100)
+
+  gradient.addColorStop(stopPt1 / 100, trueColors[0]);
+  gradient.addColorStop(stopPt2 / 100, trueColors[1]);
+  gradient.addColorStop(stopPt3 / 100, trueColors[2]);
+
+  context.fillStyle = gradient;
+  context.fill()
 }
 
 function drawRect(context, fillStyle, xStart, yStart, width, height) {
@@ -340,6 +336,49 @@ function makeArtistImg(artistName, shouldSave, opts) {
     makeArtistImgFuncs[artistName](artistName, shouldSave, opts, `polygon-${i + 1}`, i)
   }
 }
+
+const getPtRanges = () => ({
+  top: {
+    x: {
+      min: 0,
+      max: CANVAS_WIDTH - 1,
+    },
+    y: {
+      min: 0,
+      max: 0,
+    },
+  },
+  right: {
+    x: {
+      min: CANVAS_WIDTH - 1,
+      max: CANVAS_WIDTH - 1,
+    },
+    y: {
+      min: 0,
+      max: CANVAS_HEIGHT - 1,
+    },
+  },
+  bottom: {
+    x: {
+      min: 0,
+      max: CANVAS_WIDTH - 1,
+    },
+    y: {
+      min: CANVAS_HEIGHT - 1,
+      max: CANVAS_HEIGHT - 1,
+    },
+  },
+  left: {
+    x: {
+      min: 0,
+      max: 0,
+    },
+    y: {
+      min: 0,
+      max: CANVAS_HEIGHT - 1,
+    },
+  },
+})
 
 // makeMondrianImg(true)
 
