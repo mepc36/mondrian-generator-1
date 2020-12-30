@@ -264,7 +264,6 @@ const shuffle = (array) => array.sort(() => .5 - Math.random())
 function drawPolygon(context) {
   const ptRanges = getPtRanges()
 
-  // const legalColors = ['#fe0000', '#ffcece']
   const notPickedColor = getRandomItem(legalColors)
   const fillColors = legalColors.filter(color => color !== notPickedColor)
   const canvasSides = ['top', 'right', 'bottom', 'left']
@@ -288,6 +287,7 @@ function drawPolygon(context) {
   })
 
   context.closePath();
+  context.clip();
 
   // context = drawPolygonOutline(context, 5)
 
@@ -305,8 +305,10 @@ function drawPolygon(context) {
   const radius2 = getRandomInt(1000, 2000)
 
   const gradient = context.createRadialGradient(randomTriPt.x, randomTriPt.y, radius1, randomTriPt.x, randomTriPt.y, radius2);
-  const gradColors = ['red', 'blue', 'yellow', 'black', '#dbdbdb']
-  const notColors = [getRandomItem(gradColors), getRandomItem(gradColors)]
+  // const gradColors = ['red', 'blue', 'yellow', 'black', '#dbdbdb']
+  const gradColors = ['red', 'blue', 'yellow', '#dbdbdb']
+
+  const notColors = [getRandomItem(gradColors)]
   const trueColors = shuffle(gradColors.filter(gradColor => !notColors.includes(gradColor)))
 
   const stopPt1 = getRandomInt(0, 20)
@@ -318,6 +320,47 @@ function drawPolygon(context) {
   gradient.addColorStop(stopPt3 / 100, trueColors[2]);
 
   context.fillStyle = gradient;
+  context.fill()
+  context = drawSomeDots(context)
+}
+
+function drawSomeDots(context) {
+  const dotMargin = 30
+  const numRows = 20
+  const numCols = 40
+
+  const dotHeight = getRandomInt(15, 30)
+  const yMargin = (CANVAS_HEIGHT - (2 * dotMargin + numRows * dotHeight)) / numRows
+  const dotRadius = dotHeight * 0.5
+
+  const dotColors = ['#ff39e2', '#00ff5d', '#6effff']
+  const color = getRandomItem(dotColors)
+  const stopColors = {
+    '#ff39e2': '#ffcef8',
+    '#00ff5d': '#e3ffee',
+    '#6effff': '#e2ffff',
+  }
+  const stopColor = stopColors[color]
+  const startX = getRandomInt(0, 1920)
+  const startY = getRandomInt(0, 1080)
+
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numCols; j++) {
+      const x = j * (dotHeight + dotMargin) + dotMargin + dotMargin / 2 + dotRadius
+      const y = i * (dotHeight + yMargin) + dotMargin + yMargin / 2 + dotRadius
+      drawDot(x + startX, y + startY, dotRadius, color, context, stopColor)
+    }
+  }
+  return context
+}
+
+function drawDot(x, y, radius, color, context, stopColor) {
+  context.beginPath()
+  context.arc(x, y, radius, 0, 2 * Math.PI, false)
+  const gradient = context.createRadialGradient(x, y, radius / 4, x, y, radius);
+  gradient.addColorStop(0, color);
+  gradient.addColorStop(1, stopColor);
+  context.fillStyle = gradient
   context.fill()
 }
 
