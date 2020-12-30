@@ -1,13 +1,15 @@
-const CANVAS_WIDTH = 400
-const CANVAS_HEIGHT = 400
+const CANVAS_WIDTH = 1920
+const CANVAS_HEIGHT = 1080
 
-function getContext(fillStyle = 'white') {
+function getContext(fillStyle = 'white', isTransparent) {
   const canvas = document.getElementById('compositionCanvas');
   canvas.width = CANVAS_WIDTH
   canvas.height = CANVAS_HEIGHT
   const context = canvas.getContext('2d');
-  context.fillStyle = fillStyle
-  context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  if (!isTransparent) {
+    context.fillStyle = fillStyle
+    context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  }
   return { context, canvas }
 }
 
@@ -221,7 +223,6 @@ const makeArtistImgFuncs = {
 
     for (let i = 0; i < 3; i++) {
       if (idx !== 0 && Math.random() > .7) {
-        console.log('hit')
         continue
       }
       const xStart = 40
@@ -234,7 +235,96 @@ const makeArtistImgFuncs = {
     if (shouldSave) {
       saveCanvas(fileName)
     }
+  },
+  Connor: (artistName, shouldSave, opts, fileName, idx) => {
+    let { context, canvas } = getContext('', true)
+
+    const legalColors = ['red', 'blue', 'yellow']
+    const fillStyle = getRandomItem(legalColors)
+    context = drawPolygon(context, fillStyle)
+
+    if (shouldSave) {
+      saveCanvas(fileName)
+    }
   }
+}
+
+const getRandomItem = array => array[Math.floor(Math.random() * array.length)];
+
+function drawPolygon(context, fillStyle) {
+  const ptRanges = {
+    top: {
+      x: {
+        min: 0,
+        max: CANVAS_WIDTH - 1,
+      },
+      y: {
+        min: 0,
+        max: 0,
+      },
+    },
+    right: {
+      x: {
+        min: CANVAS_WIDTH - 1,
+        max: CANVAS_WIDTH - 1,
+      },
+      y: {
+        min: 0,
+        max: CANVAS_HEIGHT - 1,
+      },
+    },
+    bottom: {
+      x: {
+        min: 0,
+        max: CANVAS_WIDTH - 1,
+      },
+      y: {
+        min: CANVAS_HEIGHT - 1,
+        max: CANVAS_HEIGHT - 1,
+      },
+    },
+    left: {
+      x: {
+        min: 0,
+        max: 0,
+      },
+      y: {
+        min: 0,
+        max: CANVAS_HEIGHT - 1,
+      },
+    },
+  }
+
+  const canvasSides = ['top', 'right', 'bottom', 'left']
+  const removedSide = getRandomItem(canvasSides)
+  const polygonSides = Math.random() > .5 ? canvasSides.filter(canvasSide => canvasSide !== removedSide) : canvasSides
+  const polygonPts = []
+  polygonSides.forEach(polygonSide => {
+    const polygonSideRange = ptRanges[polygonSide]
+    const x = getRandomInt(polygonSideRange.x.min, polygonSideRange.x.max)
+    const y = getRandomInt(polygonSideRange.y.min, polygonSideRange.y.max)
+    console.log('polygonPts:', polygonPts)
+    polygonPts.push({ x, y })
+  })
+  console.log('polygonSides:', polygonSides)
+  console.log('polygonPts:', polygonPts)
+
+  context.beginPath();
+  polygonPts.forEach((polygonPt, idx) => {
+    if (idx === 0) {
+      context.moveTo(polygonPt.x, polygonPt.y);
+    } else {
+      context.lineTo(polygonPt.x, polygonPt.y);
+    }
+  })
+  context.closePath();
+
+  context.lineWidth = 2;
+  context.strokeStyle = 'black';
+  context.stroke();
+
+  context.fillStyle = fillStyle;
+  context.fill();
 }
 
 function drawRect(context, fillStyle, xStart, yStart, width, height) {
@@ -249,7 +339,7 @@ function drawRect(context, fillStyle, xStart, yStart, width, height) {
 
 function makeArtistImg(artistName, shouldSave, opts) {
   for (let i = 0; i < opts.variations; i++) {
-    makeArtistImgFuncs[artistName](artistName, shouldSave, opts, `new-artwork-${i + 1}`, i)
+    makeArtistImgFuncs[artistName](artistName, shouldSave, opts, `polygon-${i + 1}`, i)
   }
 }
 
