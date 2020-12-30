@@ -298,18 +298,15 @@ function drawPolygon(context, fillStyle) {
   const canvasSides = ['top', 'right', 'bottom', 'left']
   const removedSide = getRandomItem(canvasSides)
   const polygonSides = Math.random() > .5 ? canvasSides.filter(canvasSide => canvasSide !== removedSide) : canvasSides
-  const polygonPts = []
-  polygonSides.forEach(polygonSide => {
+  const polygonPts = polygonSides.map(polygonSide => {
     const polygonSideRange = ptRanges[polygonSide]
     const x = getRandomInt(polygonSideRange.x.min, polygonSideRange.x.max)
     const y = getRandomInt(polygonSideRange.y.min, polygonSideRange.y.max)
-    console.log('polygonPts:', polygonPts)
-    polygonPts.push({ x, y })
+    return { x, y }
   })
-  console.log('polygonSides:', polygonSides)
-  console.log('polygonPts:', polygonPts)
 
   context.beginPath();
+
   polygonPts.forEach((polygonPt, idx) => {
     if (idx === 0) {
       context.moveTo(polygonPt.x, polygonPt.y);
@@ -317,6 +314,7 @@ function drawPolygon(context, fillStyle) {
       context.lineTo(polygonPt.x, polygonPt.y);
     }
   })
+
   context.closePath();
 
   context.lineWidth = 2;
