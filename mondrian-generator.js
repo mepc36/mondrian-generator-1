@@ -332,8 +332,8 @@ const imgUrls = [
   'https://images.masterworksfineart.com/product/untitled-1980-3/sam-francis-monotype-on-paper-untitled-1980-closeup-3.jpg',
   'https://a.1stdibscdn.com/sam-francis-paintings-sklye-for-sale/a_2612/1547909086838/FRANCIS_Sam_Sklye__master.jpg',
   'https://fineartmultiple.com/media/product/715/pink-venus-kiki-from-1-life-sfr-59-1506593379-2000-3cd.jpg',
-  // 'https://c.wallhere.com/photos/0b/d1/wall_colorful_graffiti-250248.jpg!d',
-  'https://c.pxhere.com/photos/9d/9a/abstract_abstract_expressionism_abstract_painting_acrylic_acrylic_paint_art_artistic_background-1539191.jpg!d',
+  // 'https://c.wallhere.com/photos/0b/d1/wall_colorful_graffiti-250248.jpg!d', // RETURNS 503
+  // 'https://c.pxhere.com/photos/9d/9a/abstract_abstract_expressionism_abstract_painting_acrylic_acrylic_paint_art_artistic_background-1539191.jpg!d', // RETURNS 503
   'https://i.pinimg.com/originals/6a/9b/bb/6a9bbb2f743e807be85bba488a00229b.jpg',
   'https://sothebys-md.brightspotcdn.com/dims4/default/b3aa8ea/2147483647/strip/true/crop/2000x2480+0+0/resize/2048x2540!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fmedia-desk%2Fc7%2F61%2F00862d0d4816a29904c6b4e463f0%2Fn10370-111-web-crop.jpg',
   'https://fisunguner.com/wp-content/uploads/2016/12/rothko_untitled.jpg',
@@ -346,6 +346,12 @@ const imgUrls = [
   'https://cdn.shopify.com/s/files/1/0049/4197/1571/products/image_d766adfc-02c8-4728-9fd0-2b7ad913bd1c_1024x1024.jpg?v=1592659378',
   'https://arthistoryproject.com/site/assets/files/18965/charmion-von-wiegand-individual-worlds-1947-trivium-art-history.jpg',
   'https://arthistoryproject.com/site/assets/files/18933/charmion_von_wiegand-untitled-1945-trivium-art-history.jpg',
+  // GOOGLE DRIVE PHOTOS:
+  'https://drive.google.com/file/d/1ZW_oXo5Z3nLYrislM6ZiUyRl-xfU4QVY/view?usp=sharing',
+  'https://drive.google.com/file/d/1J1Fen6M5Q3iJt-3HKYGopf6ClT0uVI67/view?usp=sharing',
+  'https://drive.google.com/file/d/1te3ECCq0o6s23LiF1XH4EHzjSWRzCS61/view?usp=sharing',
+  'https://drive.google.com/file/d/1tjCrMqd6fMbHubhv-gXYTIHXNAtzjVtK/view?usp=sharing',
+  'https://drive.google.com/file/d/1Zp6P3eYK2zbala_1SD-U7H632t7XB4Vf/view?usp=sharing',
 ]
 
 async function clipImage(context, canvas) {
