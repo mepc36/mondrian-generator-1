@@ -346,12 +346,12 @@ const imgUrls = [
   'https://cdn.shopify.com/s/files/1/0049/4197/1571/products/image_d766adfc-02c8-4728-9fd0-2b7ad913bd1c_1024x1024.jpg?v=1592659378',
   'https://arthistoryproject.com/site/assets/files/18965/charmion-von-wiegand-individual-worlds-1947-trivium-art-history.jpg',
   'https://arthistoryproject.com/site/assets/files/18933/charmion_von_wiegand-untitled-1945-trivium-art-history.jpg',
-  // GOOGLE DRIVE PHOTOS:
-  'https://drive.google.com/file/d/1ZW_oXo5Z3nLYrislM6ZiUyRl-xfU4QVY/view?usp=sharing',
-  'https://drive.google.com/file/d/1J1Fen6M5Q3iJt-3HKYGopf6ClT0uVI67/view?usp=sharing',
-  'https://drive.google.com/file/d/1te3ECCq0o6s23LiF1XH4EHzjSWRzCS61/view?usp=sharing',
-  'https://drive.google.com/file/d/1tjCrMqd6fMbHubhv-gXYTIHXNAtzjVtK/view?usp=sharing',
-  'https://drive.google.com/file/d/1Zp6P3eYK2zbala_1SD-U7H632t7XB4Vf/view?usp=sharing',
+  // IMGUR PHOTOS:
+  'https://i.imgur.com/ZlPSFHg.png',
+  'https://i.imgur.com/RA85QJ6.jpeg',
+  'https://i.imgur.com/RicxCWy.jpg',
+  'https://i.imgur.com/i91FYmB.jpg',
+  'https://i.imgur.com/261dlRr.jpg',
 ]
 
 async function clipImage(context, canvas) {
