@@ -381,6 +381,7 @@ async function clipImage(context, canvas) {
     const image = new Image();
     image.onload = function () {
       context.drawImage(image, 0, 0);
+      saveCanvas()
     };
     image.src = base64
   })

@@ -9,12 +9,12 @@
     />
   </head>
   
-  <body onload="makeArtistImg('ClipImage', true, {variations: 1});">
+  <body onload="makeArtistImg('ClipImage', false, {variations: 1});">
     <center>
       <canvas id="compositionCanvas" ></canvas>
       <script type="text/javascript" src="./mondrian-generator.js"></script>
       <img style="display: none;" id="html5" src='https://previews.123rf.com/images/bravissimos/bravissimos1803/bravissimos180300420/97459917-ink-in-the-water-a-splash-of-multicolor-red-blue-yellow-and-green-paint-abstract-background-color.jpg'/>
-      <button class="btn" onclick="clearCanvas(); makeArtistImg('ClipImage', true, {variations: 1});" href="javascript:void(0);">Generate New</button>
+      <button class="btn" onclick="clearCanvas(); makeArtistImg('ClipImage', false, {variations: 1});" href="javascript:void(0);">Generate New</button>
       <a class='btn' id='save' onclick='saveCanvas()'  href="javascript:void(0);">Save Image</a>
     </center>
   </body>
