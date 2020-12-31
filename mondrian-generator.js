@@ -241,7 +241,7 @@ const makeArtistImgFuncs = {
       saveCanvas(fileName)
     }
   },
-  Connor: (artistName, shouldSave, opts, fileName, idx) => {
+  CGI: (artistName, shouldSave, opts, fileName, idx) => {
     let { context, canvas } = getContext('', true)
 
     context = drawPolygon(context, ['#fe0000', '#ffcece'])
@@ -249,7 +249,16 @@ const makeArtistImgFuncs = {
     if (shouldSave) {
       saveCanvas(fileName)
     }
-  }
+  },
+  ClipImage: (artistName, shouldSave, opts, fileName, idx) => {
+    let { context, canvas } = getContext('', true)
+
+    context = clipImage(context, canvas)
+
+    if (shouldSave) {
+      saveCanvas(fileName)
+    }
+  },
 }
 
 function drawPolygonOutline(context, lineWidth) {
@@ -322,6 +331,59 @@ function drawPolygon(context) {
   context.fillStyle = gradient;
   context.fill()
   context = drawSomeDots(context)
+}
+
+async function clipImage(context, canvas) {
+  const ptRanges = getPtRanges()
+
+  const notPickedColor = getRandomItem(legalColors)
+  const fillColors = legalColors.filter(color => color !== notPickedColor)
+  const canvasSides = ['top', 'right', 'bottom', 'left']
+  const removedSide = getRandomItem(canvasSides)
+  const polygonSides = Math.random() > .5 ? canvasSides.filter(canvasSide => canvasSide !== removedSide) : canvasSides
+  const polygonPts = polygonSides.map(polygonSide => {
+    const polygonSideRange = ptRanges[polygonSide]
+    const x = getRandomInt(polygonSideRange.x.min, polygonSideRange.x.max)
+    const y = getRandomInt(polygonSideRange.y.min, polygonSideRange.y.max)
+    return { x, y }
+  })
+
+  context.beginPath();
+
+  polygonPts.forEach((polygonPt, idx) => {
+    if (idx === 0) {
+      context.moveTo(polygonPt.x, polygonPt.y);
+    } else {
+      context.lineTo(polygonPt.x, polygonPt.y);
+    }
+  })
+
+  context.closePath();
+  context.clip();
+
+  const imgUrl = 'https://previews.123rf.com/images/bravissimos/bravissimos1803/bravissimos180300420/97459917-ink-in-the-water-a-splash-of-multicolor-red-blue-yellow-and-green-paint-abstract-background-color.jpg'
+
+  const getDataUri = function (targetUrl, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    xhr.open('GET', proxyUrl + targetUrl);
+    xhr.responseType = 'blob';
+    xhr.send();
+  };
+  getDataUri(imgUrl, function (base64) {
+    const image = new Image();
+    image.onload = function () {
+      context.drawImage(image, 0, 0);
+    };
+    image.src = base64
+  })
 }
 
 function drawSomeDots(context) {
