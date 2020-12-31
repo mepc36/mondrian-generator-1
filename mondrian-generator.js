@@ -165,9 +165,7 @@ function fillContextSquares(context, xLineStarts, yLineStarts, xLineWidths, yLin
   return context
 }
 
-const imgParams = {
-
-}
+const imgParams = {}
 
 const makeArtistImgFuncs = {
   Mondrian: (artistName, shouldSave, opts, fileName) => {
@@ -298,15 +296,6 @@ function drawPolygon(context) {
   context.closePath();
   context.clip();
 
-  // context = drawPolygonOutline(context, 5)
-
-  // const gradient = context.createLinearGradient(0, 540, 1920, 540);
-  // gradient.addColorStop(0, fillColors[0]);
-  // gradient.addColorStop(.4, 'black');
-  // context.fillStyle = gradient;
-  // context.fill();
-
-  // RADIAL GRADIENT:
   const centerX = polygonPts.reduce((acc, currVal) => acc + currVal.x, 0) / polygonSides.length
   const centerY = polygonPts.reduce((acc, currVal) => acc + currVal.y, 0) / polygonSides.length
   const randomTriPt = getRandomItem(polygonPts)
@@ -314,7 +303,6 @@ function drawPolygon(context) {
   const radius2 = getRandomInt(1000, 2000)
 
   const gradient = context.createRadialGradient(randomTriPt.x, randomTriPt.y, radius1, randomTriPt.x, randomTriPt.y, radius2);
-  // const gradColors = ['red', 'blue', 'yellow', 'black', '#dbdbdb']
   const gradColors = ['red', 'blue', 'yellow', '#dbdbdb']
 
   const notColors = [getRandomItem(gradColors)]
@@ -332,6 +320,33 @@ function drawPolygon(context) {
   context.fill()
   context = drawSomeDots(context)
 }
+
+const imgUrls = [
+  'https://images.squarespace-cdn.com/content/v1/58d436d42994cafbe9ea41da/1509648057409-4OTBXYH1V441X0P3OCEU/ke17ZwdGBToddI8pDm48kBnD1PuHq1ChlNNw8HY5Bat7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0hZPx-jNbZA_TaS-5l2nNKFuX3vssmPvjGd_aUGjvQdj0mO7zdgnfiNhBvsKx2QkvA/francis.jpg?format=2500w',
+  'https://i2.wp.com/files.123freevectors.com/wp-content/original/170617-red-yellow-and-blue-watercolor-background-image.jpg?w=800&q=95',
+  'https://images.unsplash.com/photo-1545231097-cbd796f1d95f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1286&q=80',
+  'https://images.masterworksfineart.com/product/untitled-1980-3/sam-francis-monotype-on-paper-untitled-1980-closeup-1.jpg',
+  'https://images.squarespace-cdn.com/content/v1/58d436d42994cafbe9ea41da/1509648057409-4OTBXYH1V441X0P3OCEU/ke17ZwdGBToddI8pDm48kBnD1PuHq1ChlNNw8HY5Bat7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0hZPx-jNbZA_TaS-5l2nNKFuX3vssmPvjGd_aUGjvQdj0mO7zdgnfiNhBvsKx2QkvA/francis.jpg?format=2500w',
+  'https://content.ngv.vic.gov.au/retrieve.php?size=1280&type=image&vernonID=27159',
+  'https://www.christies.com/img/LotImages/2013/NYR/2013_NYR_02697_0259_000(sam_francis_untitled041810).jpg?mode=max',
+  'https://images.masterworksfineart.com/product/untitled-1980-3/sam-francis-monotype-on-paper-untitled-1980-closeup-3.jpg',
+  'https://a.1stdibscdn.com/sam-francis-paintings-sklye-for-sale/a_2612/1547909086838/FRANCIS_Sam_Sklye__master.jpg',
+  'https://fineartmultiple.com/media/product/715/pink-venus-kiki-from-1-life-sfr-59-1506593379-2000-3cd.jpg',
+  // 'https://c.wallhere.com/photos/0b/d1/wall_colorful_graffiti-250248.jpg!d',
+  'https://c.pxhere.com/photos/9d/9a/abstract_abstract_expressionism_abstract_painting_acrylic_acrylic_paint_art_artistic_background-1539191.jpg!d',
+  'https://i.pinimg.com/originals/6a/9b/bb/6a9bbb2f743e807be85bba488a00229b.jpg',
+  'https://sothebys-md.brightspotcdn.com/dims4/default/b3aa8ea/2147483647/strip/true/crop/2000x2480+0+0/resize/2048x2540!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fmedia-desk%2Fc7%2F61%2F00862d0d4816a29904c6b4e463f0%2Fn10370-111-web-crop.jpg',
+  'https://fisunguner.com/wp-content/uploads/2016/12/rothko_untitled.jpg',
+  'https://i.redd.it/fp5z6fuaiocy.png',
+  // IMAGES WITH MORE STRUCTURE TO THEM:
+  'https://i.pinimg.com/originals/da/25/9e/da259ecca2fc09510e93d5541c5cb6aa.jpg',
+  'https://www.moma.org/d/assets/W1siZiIsIjIwMTcvMDYvMjIvODljcmkzc3NiNl8xNDEyNjMwNzM2XzY5MF9CbHVlX051ZGVzLmpwZyJdLFsicCIsImNvbnZlcnQiLCItcXVhbGl0eSA5MCAtcmVzaXplIDIwMDB4MjAwMFx1MDAzZSJdXQ/1412630736_690_Blue_Nudes.jpg?sha=c93f67536c56e8aa',
+  'https://cdn.shopify.com/s/files/1/0049/4197/1571/products/image_db896678-11a5-468d-b995-db1d3b950c79_1024x1024@2x.jpg?v=1592659379',
+  'https://cdn.shopify.com/s/files/1/1021/8371/products/XDB7_006_bd35b659-41b5-4106-b46c-61b672c72ce0_1200x1200.jpg?v=1569607723',
+  'https://cdn.shopify.com/s/files/1/0049/4197/1571/products/image_d766adfc-02c8-4728-9fd0-2b7ad913bd1c_1024x1024.jpg?v=1592659378',
+  'https://arthistoryproject.com/site/assets/files/18965/charmion-von-wiegand-individual-worlds-1947-trivium-art-history.jpg',
+  'https://arthistoryproject.com/site/assets/files/18933/charmion_von_wiegand-untitled-1945-trivium-art-history.jpg',
+]
 
 async function clipImage(context, canvas) {
   const ptRanges = getPtRanges()
@@ -359,9 +374,9 @@ async function clipImage(context, canvas) {
   })
 
   context.closePath();
-  context.clip();
+  context.clip()
 
-  const imgUrl = 'https://previews.123rf.com/images/bravissimos/bravissimos1803/bravissimos180300420/97459917-ink-in-the-water-a-splash-of-multicolor-red-blue-yellow-and-green-paint-abstract-background-color.jpg'
+  const imgUrl = getRandomItem(imgUrls)
 
   const getDataUri = function (targetUrl, callback) {
     const xhr = new XMLHttpRequest();
@@ -381,7 +396,7 @@ async function clipImage(context, canvas) {
     const image = new Image();
     image.onload = function () {
       context.drawImage(image, 0, 0);
-      saveCanvas()
+      saveCanvas('polygon-img')
     };
     image.src = base64
   })
